@@ -6,8 +6,32 @@ package mainClasses;
  */
 public class User {
     
-    int user_id, card_number;
-    String first_name, last_name, email;
+    int user_id, balance;
+    String first_name, last_name, email, username, password, card_number;
+    
+    public void setBalance(int balance){
+        this.balance = balance;
+    }
+    
+    public int getBalance(){
+        return this.balance;
+    }
+    
+    public void setUsername(String username){
+        this.username = username;
+    }
+    
+    public String getUsername(){
+        return this.username;
+    }
+    
+    public void setPassword(String password){
+        this.password = password;
+    }
+    
+    public String getPassword(){
+        return this.password;
+    }
     
     public void setUser_id(int user_id){
         this.user_id = user_id;
@@ -17,11 +41,11 @@ public class User {
         return this.user_id;
     }
     
-    public void setCard_number(int card_number){
+    public void setCard_number(String card_number){
         this.card_number = card_number;
     }
     
-    public int getCard_number(){
+    public String getCard_number(){
         return this.card_number;
     }
     

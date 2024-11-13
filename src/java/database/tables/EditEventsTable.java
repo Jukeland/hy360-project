@@ -26,7 +26,7 @@ public class EditEventsTable {
     }
     
      /* function to convert an event object to a json string */
-    public String bookingToJSON(Event e) {
+    public String eventToJSON(Event e) {
         
         Gson gson = new Gson();
         String json = gson.toJson(e, Event.class);
@@ -57,7 +57,7 @@ public class EditEventsTable {
                     + "'" + e.getName()+ "',"
                     + "'" + e.getDate()+ "',"
                     + "'" + e.getTime() + "',"
-                    + "'" + e.getType() + "'"
+                    + "'" + e.getType() + "',"
                     + "'" + e.getCapacity() + "'"                    
                     + ")";
             //stmt.execute(table);
@@ -75,7 +75,7 @@ public class EditEventsTable {
     }
     
     /* function to get an event with event_id = id from the database */
-    public Event databaseToBooking(int id) throws SQLException, ClassNotFoundException {
+    public Event databaseToEvent(int id) throws SQLException, ClassNotFoundException {
         
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -109,7 +109,7 @@ public class EditEventsTable {
                 + "(event_id INTEGER not NULL AUTO_INCREMENT, "
                 + " name VARCHAR(50) not NULL, "
                 + " date DATE not NULL, "
-                + " time VARCHAR(5) not NULL, "
+                + " time VARCHAR(10) not NULL, "
                 + " type VARCHAR(30) not NULL, "
                 + " capacity INTEGER not NULL, "
                 + " PRIMARY KEY (event_id))";
@@ -119,8 +119,29 @@ public class EditEventsTable {
 
     }
     
+    public void deleteEvent(int id) throws SQLException, ClassNotFoundException{
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        
+        try{
+            
+            stmt.executeUpdate("DELETE FROM bookings WHERE event_id = " + id);
+            stmt.executeUpdate("DELETE FROM events WHERE event_id = " + id);
+            stmt.close();
+            con.close();
+            
+        }catch(SQLException e){
+            
+            System.err.println("del event says: Got an exception! ");
+            System.err.println(e.getMessage());
+            
+        }
+        
+    }
+    
     /* function to get all events from the database */
-    public ArrayList<Event> databaseToBookings() throws SQLException, ClassNotFoundException {
+    public ArrayList<Event> databaseToEvents() throws SQLException, ClassNotFoundException {
         
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();

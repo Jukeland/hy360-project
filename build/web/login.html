@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Antonis Chliaras">
+    <meta name="viewport" 
+      content="width=device-width, initial-scale=1.0">
+    <title>Event Booking</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/register_style.css">
+    <script src="js/login_user.js" ></script>
+    <script src="js/register_user.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        tr th {
+            font-weight: bold
+        }
+
+        h3 {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        table {
+            margin-bottom: 150px;
+            width: 100%;
+        }
+    </style>
+  </head>
+
+  <body>
+
+    <div>
+        <div>
+          <header class="headers" id="title">
+            <h1>Event Booking</h1>
+          </header>
+        </div>
+    
+    
+        <div class="black_div">
+          <nav id="navigator">
+            <ul>
+              <li id="home" class="nav_list headers"><a href="index.html">Home</a></li>
+              <li id="register" class="nav_list headers"><a href="register.html">Register</a></li>
+              <li id="login" class="nav_list headers"><a href="login.html">Login</a></li>
+              <li id="events_table" class="nav_list headers"><a href="jsp/events_table_page.jsp">Events</a></li>
+              <li id="logout" class="nav_list headers"></li>
+              <li id="profile" class="nav_list headers"></li>
+              <li id="events" class="nav_list headers"></li>
+              <li id="bookings" class="nav_list headers"></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    
+    
+
+      <div id="login_wrapper">
+          <form id="login_form" name="login_form" onsubmit="loginPOST();return false">
+            <label>Username:</label>
+            <input id="username" name="username"  
+                required>
+
+            <br>
+            <br>
+
+            <label>Password:</label>
+            <input type="password" id="pwd" 
+                name="password" 
+                required>
+
+            <br>
+
+            <button type="button" id="hideShow" onclick="changeVisibility()">Show Password</button>
+
+            <br>
+            <br>
+
+            <input name="submit" type="submit" value="Login">
+
+        </form>
+      </div>
+      
+      <br>
+      
+    <p id="login_msg"></p>
+
+  </body>
+</html>

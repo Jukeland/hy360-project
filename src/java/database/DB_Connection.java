@@ -34,8 +34,8 @@ public class DB_Connection {
         ResultSetMetaData metadata = rs.getMetaData();
         int columnCount = metadata.getColumnCount();
         
-        String row = "";
-        for (int i = 1; i <= columnCount; i++) {
+        for(int i = 1; i <= columnCount; i++){
+            
             String name = metadata.getColumnName(i);
             String value = rs.getString(i);
             System.out.println(name + " " + value);
@@ -49,10 +49,8 @@ public class DB_Connection {
         ResultSetMetaData metadata = rs.getMetaData();
         int columnCount = metadata.getColumnCount();
         JsonObject object = new JsonObject();
-        
-        
-        String row = "";
-        for (int i = 1; i <= columnCount; i++) {
+     
+        for(int i = 1; i <= columnCount; i++){
             
             String name = metadata.getColumnName(i);
             String value = rs.getString(i);
@@ -70,9 +68,7 @@ public class DB_Connection {
         int columnCount = metadata.getColumnCount();
         JsonObject object = new JsonObject();
         
-        
-        String row = "";
-        for (int i = 1; i <= columnCount; i++) {
+        for(int i = 1; i <= columnCount; i++){
             
             String name = metadata.getColumnName(i);
             String value = rs.getString(i);

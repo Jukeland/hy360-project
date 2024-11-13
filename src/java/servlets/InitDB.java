@@ -20,14 +20,20 @@ public class InitDB extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            
             response.setContentType("text/html;charset=UTF-8");
             InitDatabase init=new InitDatabase();
             init.initDatabase();
+            
         } catch (SQLException ex) {
+            
             response.sendError(500);
             Logger.getLogger(InitDB.class.getName()).log(Level.SEVERE, null, ex);
+        
         } catch (ClassNotFoundException ex) {
+            
             Logger.getLogger(InitDB.class.getName()).log(Level.SEVERE, null, ex);
+        
         }
 
     }

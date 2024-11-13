@@ -12,17 +12,21 @@ import java.sql.Statement;
 public class InitDatabase {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        
         InitDatabase init = new InitDatabase();
         init.initDatabase();
         init.initTables();
+        
     }
 
     public void dropDatabase() throws SQLException, ClassNotFoundException {
+        
         Connection conn = getInitialConnection();
         Statement stmt = conn.createStatement();
         String sql = "DROP DATABASE hy360_2024";
         stmt.executeUpdate(sql);
         System.out.println("Database dropped successfully...");
+        
     }
 
     public void initDatabase() throws SQLException, ClassNotFoundException {
@@ -39,18 +43,18 @@ public class InitDatabase {
 
     public void initTables() throws SQLException, ClassNotFoundException {
         
-        EditBookingsTable ebt = new EditBookingsTable();
-        ebt.createBookingTable();
-        
+        EditUsersTable eut = new EditUsersTable();
+        eut.createUserTable(); 
+                
         EditEventsTable eet = new EditEventsTable();
         eet.createEventTable();
         
+        EditBookingsTable ebt = new EditBookingsTable();
+        ebt.createBookingTable();
+       
         EditTicketsTable ett = new EditTicketsTable();
         ett.createTicketTable();
-        
-        EditUsersTable eut = new EditUsersTable();
-        eut.createUserTable();  
-        
+
     }
 
 }
