@@ -1,7 +1,7 @@
 <div id="formWrapper">
     <form id="update_form" name="update_form" onsubmit="updatePOST();return false">
 
-        <label>Username</label>
+        <label>Username:</label>
         <input id="username" name="username" 
             pattern="[a-zA-z]{1}[0-9a-zA-z]+"
             minlength="8"
@@ -25,7 +25,7 @@
         <input type="password" id="pwd" 
             name="password"
             minlength="8" maxlength="15" 
-            required onblur="checkPassword()">
+            required onblur="checkPassword()" readonly>
 
         <br>
         <label class="warnings" id="pwdStrength"></label>
@@ -34,7 +34,7 @@
         <label>Confirm Password:</label>
         <input type="password" id="cnfmpwd" 
             minlength="8" maxlength="15"
-            required onblur="checkPassword()">
+            required onblur="checkPassword()" readonly>
 
         <br>
         <button type="button" id="hideShow" onclick="changeVisibility()">Show Password</button>
@@ -67,7 +67,7 @@
         <br>
         <br>
 
-        <label>Credit Card Number:</label>
+        <label for="card_number">Credit Card Number:</label>
         <input id="card_number" name="card_number"
                pattern="[0-9]{16,16}"
                minlength="16" maxlength="16"

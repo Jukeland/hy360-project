@@ -41,10 +41,26 @@
     <br>
     <br>
     
-    <label for="capacity">Venue Capacity</label>
+    <label for="capacity">Venue Capacity:</label>
     <input id="capacity" name="capacity" 
         pattern="[0-9]{1,}" minlength="1"                                                                                  
         required>
+    
+    <br>
+    <br>
+    
+    <label for="vip">Number of VIPs</label>
+    <input id="vip" name="vip"
+           pattern="[0-9]{1,}" minlength="1"
+           required>
+    
+    <br>
+    <br>
+    
+    <label for="price">Ticket Price:</label>
+    <input id="price" name="price"
+           pattern="[0-9]{1,}" minlength="1"
+           required>
     
     <p id="final_price"></p>
 

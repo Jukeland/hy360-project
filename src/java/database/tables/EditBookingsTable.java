@@ -1,6 +1,7 @@
 package database.tables;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import mainClasses.Booking;
 import database.DB_Connection;
 import java.sql.Connection;
@@ -47,7 +48,7 @@ public class EditBookingsTable {
             
             return bookings;
             
-        } catch (Exception e) {
+        } catch (JsonSyntaxException | SQLException e) {
             System.err.println("EditBookingsTable -> getBookingFromUserId: Got an exception! ");
             System.err.println(e.getMessage());
         }
@@ -159,8 +160,8 @@ public class EditBookingsTable {
 
             stmt.close();
 
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
+        } catch (SQLException e) {
+            System.err.println("createNewBooking says: Got an exception! ");
             System.err.println(e.getMessage());
         }
         
@@ -188,8 +189,38 @@ public class EditBookingsTable {
             
             return bookings;
 
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
+        } catch (JsonSyntaxException | SQLException e) {
+            System.err.println("EditBookingsTable: databaseToBookings says:Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        
+        return null;
+        
+    }
+    
+     public ArrayList<Booking> databaseGetEventBookings(int event_id) throws SQLException, ClassNotFoundException {
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Booking> bookings = new ArrayList<>();
+        ResultSet rs;
+        
+        try {
+            
+            rs = stmt.executeQuery("SELECT * FROM bookings WHERE event_id = " + event_id);
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Booking book = gson.fromJson(json, Booking.class);
+                bookings.add(book);
+            }
+            stmt.close();
+            con.close();
+            
+            return bookings;
+
+        } catch (JsonSyntaxException | SQLException e) {
+            System.err.println("EditBookingsTable: databaseGetEventBookings says: Got an exception! ");
             System.err.println(e.getMessage());
         }
         

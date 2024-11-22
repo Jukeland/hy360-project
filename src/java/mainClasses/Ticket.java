@@ -6,8 +6,16 @@ package mainClasses;
  */
 public class Ticket {
     
-    int ticket_id, price, available; 
+    int ticket_id, price, available, event_id; 
     String type;
+    
+    public void setEvent_id(int event_id){
+        this.event_id = event_id;
+    }
+    
+    public int getEvent_id(){
+        return this.event_id;
+    }
     
     public void setTicket_id(int ticket_id){
         this.ticket_id = ticket_id;

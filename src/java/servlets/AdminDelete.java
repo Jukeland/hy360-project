@@ -38,24 +38,27 @@ public class AdminDelete extends HttpServlet {
                 eut.deleteUser(jo.getInt("id"));
                 
             }else if(jo.getString("type").equals("event")){
-                
+
                 EditEventsTable eet = new EditEventsTable();
+                
                 EditUsersTable eut = new EditUsersTable();
-                User user = eut.databaseToUser(jo.getInt("id"));
+                User user;
+                
+                /* get all bookings associated with this event */
                 EditBookingsTable ebt = new EditBookingsTable();
-                ArrayList<Booking> bookings = ebt.databaseToBookings();
-                
-                System.out.println("\n\n==== admin del: user.getBalance = " + user.getBalance());
-                
+                ArrayList<Booking> bookings = ebt.databaseGetEventBookings(jo.getInt("id"));
+
+                /* refund all users associated with this event */
                 for(Booking b : bookings){
-                    if(b.getUser_id() == user.getUser_id()){
-                        user.setBalance(user.getBalance() + b.getPrice() * b.getTicket_num());
-                    }
+
+                    user = eut.databaseToUser(b.getUser_id());
+                    user.setBalance(user.getBalance() + b.getPrice());
+                    
+                    JSONObject u = new JSONObject(eut.userToJSON(user));
+                    eut.updateUserBalance(u);
+                    
                 }
-                
-                JSONObject u = new JSONObject(eut.userToJSON(user));
-                eut.updateUser(u);
-                
+
                 System.out.println("adminDel event: id = " + jo.getInt("id"));
                 eet.deleteEvent(jo.getInt("id"));
                 

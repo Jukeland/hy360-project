@@ -121,7 +121,7 @@
                             int ev_id = ev.getEvent_id();
                             for(Booking b : bookings){
                                 if(ev_id == b.getEvent_id()){
-                                    money_gained = b.getTicket_num() * b.getPrice();
+                                    money_gained += b.getPrice();
                                 }
                             }
                     %>
@@ -136,6 +136,9 @@
                             <button type="button" onclick="admin_delete('<%=ev.getEvent_id()%>', 'event')">Delete</button>
                         </td>
                     </tr>
+                    <%
+                        }
+                    %>
                 </tbody>
                 
             </table>
@@ -143,8 +146,7 @@
         </div>
                         
                     <%
-                            
-                        }
+                                         
             }catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

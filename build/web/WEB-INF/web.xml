@@ -40,6 +40,10 @@
         <servlet-name>AddEvent</servlet-name>
         <servlet-class>servlets.AddEvent</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BookRegister</servlet-name>
+        <servlet-class>servlets.BookRegister</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InitDB</servlet-name>
         <url-pattern>/InitDB</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>AddEvent</servlet-name>
         <url-pattern>/AddEvent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookRegister</servlet-name>
+        <url-pattern>/BookRegister</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

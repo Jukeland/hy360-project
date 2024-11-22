@@ -1,6 +1,7 @@
 package database.tables;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import mainClasses.Event;
 import database.DB_Connection;
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 /**
  *
@@ -43,6 +45,40 @@ public class EditEventsTable {
         
     }
     
+    public ArrayList<Event> getAvailableEvents() throws SQLException, ClassNotFoundException {
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Event> events = new ArrayList<>();
+        ResultSet rs;
+        
+        LocalDate obj = LocalDate.now();
+        
+        try{
+            
+            rs = stmt.executeQuery("SELECT * FROM events WHERE capacity > 0 AND date > '" + obj.toString() + "'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Event event = gson.fromJson(json, Event.class);
+                events.add(event);
+            }
+            stmt.close();
+            con.close();
+            
+            return events;
+            
+        }catch(JsonSyntaxException | SQLException ex){
+            
+            System.err.println("Got an exception! ");
+            System.err.println(ex.getMessage());
+            
+        }
+        
+        return null;
+        
+    }
+    
     /* function to create a new event in the database from an event object e */
     public void createNewEvent(Event e) throws SQLException, ClassNotFoundException {
         
@@ -63,7 +99,7 @@ public class EditEventsTable {
             //stmt.execute(table);
 
             stmt.executeUpdate(insertQuery);
-            System.out.println("# The booking was successfully added in the database.");
+            System.out.println("# The event was successfully added in the database.");
 
             stmt.close();
 
@@ -126,6 +162,7 @@ public class EditEventsTable {
         
         try{
             
+            stmt.executeUpdate("DELETE FROM tickets WHERE event_id = " + id);
             stmt.executeUpdate("DELETE FROM bookings WHERE event_id = " + id);
             stmt.executeUpdate("DELETE FROM events WHERE event_id = " + id);
             stmt.close();
@@ -170,5 +207,34 @@ public class EditEventsTable {
         return null;
         
     }
+    
+    public int databaseGetEventId(String name) throws SQLException, ClassNotFoundException{
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs;
+        
+        try{
+           
+            rs = stmt.executeQuery("SELECT event_id FROM events WHERE name = '" + name + "'");
+            int result = -1;
+            if(rs.next())
+                result = rs.getInt(1);
+            stmt.close();
+            con.close();
+
+            return result;
+            
+        }catch(SQLException e){
+            
+            System.err.println("EditEventsTable getId says: Got an exception! ");
+            System.err.println(e.getMessage());
+            
+        }
+        
+        return -1;
+        
+    }
+   
     
 }

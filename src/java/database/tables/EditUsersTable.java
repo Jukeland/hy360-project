@@ -114,13 +114,33 @@ public class EditUsersTable {
         try{
             
             String update = "UPDATE users SET "
-                + "username='" + jo.getString("username") + "',"
-                + "password='" + jo.getString("password") + "',"
-                + "email='" + jo.getString("email") + "',"
-                + "first_name='" + jo.getString("first_name") + "',"
-                + "last_name='" + jo.getString("last_name") + "',"
-                + "balance='" + jo.getInt("balance") + "',"
-                + "card_number='" + jo.getString("card_number") + "'"
+                + "card_number='" + jo.getString("card_number") + "',"
+                + "balance='1000'"
+                + "WHERE " 
+                + "user_id ='" + databaseGetUserId(jo.getString("username")) + "'";
+            stmt.executeUpdate(update);
+            
+        }catch(SQLException | JSONException e){
+            
+            System.err.println("updateUser says: Got an exception! ");
+            System.err.println(e.getMessage());
+            
+        }
+        
+        stmt.close();
+        con.close();
+        
+    }
+    
+    public void updateUserBalance(JSONObject jo) throws SQLException, ClassNotFoundException{
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        
+        try{
+            
+            String update = "UPDATE users SET "
+                + "balance='" + jo.getInt("balance") + "'"
                 + "WHERE " 
                 + "user_id ='" + databaseGetUserId(jo.getString("username")) + "'";
             stmt.executeUpdate(update);

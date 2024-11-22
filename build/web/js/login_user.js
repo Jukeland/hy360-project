@@ -108,7 +108,6 @@ function updateInit(){
 function updateView(response){
 
     const jr = JSON.parse(response);
-    console.log("json response: " + jr.balance);
     
     $('#username').val(jr.username);
     $('#email').val(jr.email);
@@ -123,13 +122,12 @@ function updateView(response){
 
 /* register the updated user's data into the database */
 function updatePOST(){
-    let myForm = document.getElementById("update_form");
-    let formData = new FormData(myForm);
+
     const data = {};
-    formData.forEach((value, key) => data[key] = value);
-    
+    data['card_number'] = document.getElementById("card_number").value;
+    data['username'] = logged_in_username;
+
     let jsonData = JSON.stringify(data);
-    
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'UpdateInfo');
     xhr.send(jsonData);
@@ -181,14 +179,54 @@ function show_available_events(response){
     const obj = JSON.parse(text);
     
     for(var i = 0; i < jr.length; i++){
-        let daily_price = obj[i].price;
-        daily_price = daily_price.slice(5);
-        daily_price = daily_price.slice(0, -1);
         
-        let uname = obj[i].username;
+        let name = obj[i].name;
         
-        $('#table_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td><button type="button" onclick="book_event(\'' + uname + '\',' + daily_price + ')">Book</button></td></tr>');
+        $('#table_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td>' + obj[i].type + '</td><td>' + obj[i].capacity + '</td><td><button type="button" onclick="book_event(\'' + name + '\')">Book</button></td></tr>');
+    
     }
+    
+}
+
+function book_event(name){
+    
+    const data = {};
+    data['name'] = name;
+    data['username'] = logged_in_username;
+    
+    let jsonData = JSON.stringify(data);
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BookRegister');
+    xhr.send(jsonData);
+    
+    xhr.onload = function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            show_book_msg('success');
+        }else if(xhr.status !== 200){
+            show_book_msg('failure');
+        }
+    };
+    
+}
+
+function show_book_msg(opCode){
+    
+    if(opCode === "success"){
+        $('#book_msg').append("Booking was successful!");
+    }else if(opCode === "failure"){
+        $('#book_msg').append("Booking was not successful!");
+    }
+    
+}
+
+
+
+
+function bookings_init(){
+    
+    $('#login_msg').empty();
+    $('#login_wrapper').load('bookings.html');
     
 }
 
@@ -231,7 +269,7 @@ function admin_delete(id, type){
     data['id'] = id;
     data['type'] = type;
     let jsonData = JSON.stringify(data);
-    
+
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'AdminDelete');
     xhr.send(jsonData);

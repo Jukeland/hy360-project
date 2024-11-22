@@ -1,6 +1,7 @@
 package database.tables;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import mainClasses.Ticket;
 import database.DB_Connection;
 import java.sql.Connection;
@@ -19,7 +20,9 @@ public class EditTicketsTable {
     public Ticket jsonToTicket(String json) {
         
         Gson gson = new Gson();
+        System.out.println("EditTicketsTable Servlet: jsonToTicket");
         Ticket t = gson.fromJson(json, Ticket.class);
+        
         return t;
         
     }
@@ -50,8 +53,9 @@ public class EditTicketsTable {
         try {
             
             String insertQuery = "INSERT INTO "
-                    + " tickets (price, available, type) "
+                    + " tickets (event_id, price, available, type) "
                     + " VALUES ("
+                    + "'" + t.getEvent_id()+ "',"
                     + "'" + t.getPrice() + "', "
                     + "'" + t.getAvailable() + "', "
                     + "'" + t.getType() + "'"
@@ -61,8 +65,8 @@ public class EditTicketsTable {
             System.out.println("# The ticket was successfully added to the database.");
             stmt.close();
 
-        } catch (Exception ex) {
-            System.err.println("Got an exception! ");
+        } catch (SQLException ex) {
+            System.err.println("createNewTicket says: Got an exception! ");
             System.err.println(ex.getMessage());
         }
         
@@ -103,9 +107,11 @@ public class EditTicketsTable {
         Statement stmt = con.createStatement();
         String sql = "CREATE TABLE tickets "
                 + "(ticket_id INTEGER not NULL AUTO_INCREMENT, "
+                + " event_id INTEGER not NULL, "
                 + " price INTEGER not NULL, "
                 + " available INTEGER not NULL, "
                 + " type VARCHAR(50) not NULL, "
+                + " FOREIGN KEY (event_id) REFERENCES events(event_id), "
                 + " PRIMARY KEY (ticket_id))";
         stmt.execute(sql);
         stmt.close();
@@ -137,8 +143,40 @@ public class EditTicketsTable {
 
             return tickets;
 
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
+        } catch (JsonSyntaxException | SQLException e) {
+            System.err.println("EditTicketsTable: databaseToTickets says: Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+
+        return null;
+        
+    }
+    
+    public ArrayList<Ticket> databaseGetEventTickets(int event_id) throws SQLException, ClassNotFoundException {
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        ResultSet rs;
+
+        try {
+            
+            rs = stmt.executeQuery("SELECT * FROM tickets WHERE event_id = " + event_id);
+            
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Ticket ticket = gson.fromJson(json, Ticket.class);
+                tickets.add(ticket);
+            }
+            
+            stmt.close();
+            con.close();
+
+            return tickets;
+
+        } catch (JsonSyntaxException | SQLException e) {
+            System.err.println("EditTicketsTable: databaseGetEventTickets says: Got an exception! ");
             System.err.println(e.getMessage());
         }
 
