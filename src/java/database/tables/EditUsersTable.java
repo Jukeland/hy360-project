@@ -132,6 +132,31 @@ public class EditUsersTable {
         
     }
     
+    public void setBalance(int user_id, int balance) throws SQLException, ClassNotFoundException{
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        
+        try{
+            
+            String update = "UPDATE users SET "
+                + "balance='" + balance + "'"
+                + "WHERE " 
+                + "user_id ='" + user_id + "'";
+            stmt.executeUpdate(update);
+            
+        }catch(SQLException | JSONException e){
+            
+            System.err.println("setBalance says: Got an exception! ");
+            System.err.println(e.getMessage());
+            
+        }
+        
+        stmt.close();
+        con.close();
+        
+    }
+    
     public void updateUserBalance(JSONObject jo) throws SQLException, ClassNotFoundException{
         
         Connection con = DB_Connection.getConnection();

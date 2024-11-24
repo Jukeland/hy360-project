@@ -6,7 +6,7 @@ package mainClasses;
  */
 public class Booking {
     
-    int booking_id, user_id, event_id, ticket_num, price;
+    int booking_id, user_id, event_id, vip_num, reg_num, price;
     String date;
     
     public void setBooking_id(int booking_id){
@@ -33,12 +33,20 @@ public class Booking {
         return this.event_id;
     }
     
-    public void setTicket_num(int ticket_num){
-        this.ticket_num = ticket_num;
+    public void setVip_num(int ticket_num){
+        this.vip_num = ticket_num;
     }
     
-    public int getTicket_num(){
-        return this.ticket_num;
+    public int getVip_num(){
+        return this.vip_num;
+    }
+    
+    public void setReg_num(int ticket_num){
+        this.reg_num = ticket_num;
+    }
+    
+    public int getReg_num(){
+        return this.reg_num;
     }
     
     public void setDate(String date){

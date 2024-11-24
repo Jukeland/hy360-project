@@ -3,6 +3,23 @@ var logged_in_password = "";
 var logged_in_userType = "";
 var logged_in_id = "";
 
+var event_id;
+var vip;
+var reg;
+var vip_price;
+var reg_price;
+var final_price;
+
+
+/* 
+ * ========================================================================================
+ * 
+ *                          The following functions are used to setup the login page (AJAX)
+ *   
+ * ========================================================================================   
+ */
+
+
 /* check if the user's credentials are on the database and display a message accordingly */
 function loginPOST(){
     let myForm = document.getElementById("login_form");
@@ -142,6 +159,15 @@ function updatePOST(){
 }
 
 
+/* 
+ * ========================================================================================
+ * 
+ *                     The following functions are used to display the available events (AJAX)
+ *   
+ * ========================================================================================   
+ */
+
+
 function events_init(){
     
     $('#login_msg').empty();
@@ -182,19 +208,131 @@ function show_available_events(response){
         
         let name = obj[i].name;
         
-        $('#table_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td>' + obj[i].type + '</td><td>' + obj[i].capacity + '</td><td><button type="button" onclick="book_event(\'' + name + '\')">Book</button></td></tr>');
+        $('#table_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td>' + obj[i].type + '</td><td>' + obj[i].capacity + '</td><td><button type="button" onclick="ticket_init(\'' + name + '\', \'' + obj[i].event_id + '\')">Book</button></td></tr>');
     
     }
     
 }
 
-function book_event(name){
+
+/* 
+ * ========================================================================================
+ * 
+ *               The following functions are used to display the available tickets of an event (AJAX)
+ *   
+ * ========================================================================================   
+ */
+
+
+function ticket_init(name, e_id){
+    
+    $('#login_wrapper').load('booking_form.html');
+    event_id = e_id;
     
     const data = {};
     data['name'] = name;
-    data['username'] = logged_in_username;
     
     let jsonData = JSON.stringify(data);
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'AvailableTickets');
+    xhr.send(jsonData);
+    
+    xhr.onload = function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            show_available_tickets(xhr.responseText);
+        }else if(xhr.status !== 200){
+            alert(xhr.status);
+        }
+    };
+    
+}
+
+function show_available_tickets(response){
+    
+    const jr = JSON.parse(response);
+    
+    let text = '[{';
+    for(var i = 0; i < jr.length; i++){
+        text = text + jr[i];
+        if(i < jr.length - 1)
+            text = text + '},{';
+    }
+    text = text + '}]';
+    const obj = JSON.parse(text);
+    
+    vip = 0;
+    reg = 0;
+    
+    for(var i = 0; i < jr.length; i++){
+        
+        if(obj[i].type === "VIP"){
+            vip++;
+            vip_price = obj[i].price;
+        }else if(obj[i].type === "regular"){
+            reg++;
+            reg_price = obj[i].price;
+        }   
+
+        // $('#tickets_table_body').append('<tr><td>' + obj[i].type + '</td><td>' + obj[i].price + '</td></tr>');
+        
+    }
+    
+    $('#tickets_table_body').append('<tr><td>VIP</td><td>' + vip + '</td><td>' + vip_price + '€</td></tr>');
+    $('#tickets_table_body').append('<tr><td>Regular</td><td>' + reg + '</td><td>' + reg_price + '€</td></tr>');
+    
+}
+
+function show_final_price(){
+    
+    if(vip === 0)
+        final_price = $('#reg_tickets').val() * reg_price;
+    else if(reg === 0)
+        final_price = $('#vip_tickets').val() * vip_price;
+    else
+        final_price = $('#vip_tickets').val() * vip_price + $('#reg_tickets').val() * reg_price;
+    
+    $('#final_price').empty();
+    $('#final_price').append("Final Price: " + final_price + "€");
+    
+}
+
+
+/* 
+ * ========================================================================================
+ * 
+ *              The following functions are used to register a new booking in the database (AJAX)
+ *   
+ * ========================================================================================   
+ */
+
+
+function book_check(){
+
+    if(parseInt($('#vip_tickets').val()) <= vip && parseInt($('#reg_tickets').val()) <= reg){
+        book_post();
+    }else{
+        $('#ticket_warning').empty();
+        $('#ticket_warning').append("You can't book more tickets than available");
+    }
+        
+}
+
+function book_post(){
+    
+    const data = {};
+    data['event_id'] = event_id;
+    data['username'] = logged_in_username;
+    data['total_vip'] = vip;
+    data['total_reg'] = reg;
+    data['vip_num'] = parseInt($('#vip_tickets').val());
+    data['reg_num'] = parseInt($('#reg_tickets').val());
+    data['ticket_num'] = parseInt($('#vip_tickets').val()) + parseInt($('#reg_tickets').val());;
+    data['price'] = final_price;
+    
+    let jsonData = JSON.stringify(data);
+    
+    console.log("bookPOST: " + jsonData);
     
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'BookRegister');
@@ -213,24 +351,107 @@ function book_event(name){
 function show_book_msg(opCode){
     
     if(opCode === "success"){
+        $('#ticket_warning').empty();
+        $('#book_msg').empty();
         $('#book_msg').append("Booking was successful!");
     }else if(opCode === "failure"){
+        $('#ticket_warning').empty();
+        $('#book_msg').empty();
         $('#book_msg').append("Booking was not successful!");
     }
     
 }
 
 
+/* 
+ * ========================================================================================
+ * 
+ *     The following functions are used to display the user's bookings and update their status accordingly (AJAX)
+ *   
+ * ========================================================================================   
+ */
 
+function get_bookings(){
+    
+    let data = {};
+    data['username'] = logged_in_username;
+    let jsonData = JSON.stringify(data);
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'GetBookings');
+    xhr.send(jsonData);
+    
+    xhr.onload = function(){
+        if (xhr.readyState === 4 && xhr.status === 200){
+            show_bookings(xhr.responseText);
+        } else if (xhr.status !== 200){
+            $('#man_book_msg').append("You have no bookings");
+        }
+    };
+    
+}
+
+function show_bookings(response){
+    
+    const jr = JSON.parse(response);
+   
+    let text = '[{';
+    for(var i = 0; i < jr.length; i++){
+        text = text + jr[i];
+        if(i < jr.length - 1)
+            text = text + '},{';
+    }
+    text = text + '}]';
+    const obj = JSON.parse(text);
+    
+    for(var i = 0; i < jr.length; i++){
+        
+        $('#bookings_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td>' + obj[i].ticket_num + '</td><td>' + obj[i].price + '€</td><td><button onclick="cancel_booking(\'' + obj[i].booking_id + '\')">Cancel</button></td></tr>');
+        
+    }
+    
+}
+
+function cancel_booking(booking_id){
+    
+    let data = {};
+    data['booking_id'] = booking_id;
+    data['username'] = logged_in_username;
+    let jsonData = JSON.stringify(data);
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'CancelBooking');
+    xhr.send(jsonData);
+    
+    xhr.onload = function(){
+        if (xhr.readyState === 4 && xhr.status === 200){
+            bookings_init();
+        } else if (xhr.status !== 200){
+            alert(xhr.status);
+        }
+    };
+    
+}
 
 function bookings_init(){
     
     $('#login_msg').empty();
+    $('#book_area').empty();
+    $('#review_area').empty();
     $('#login_wrapper').load('bookings.html');
+    
+    get_bookings();
     
 }
 
 
+/* 
+ * ========================================================================================
+ * 
+ *                      The following functions are used to implement admin privilages (AJAX)
+ *   
+ * ========================================================================================   
+ */
 
 
 function admin_add_event(){

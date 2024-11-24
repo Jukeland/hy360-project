@@ -44,6 +44,18 @@
         <servlet-name>BookRegister</servlet-name>
         <servlet-class>servlets.BookRegister</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AvailableTickets</servlet-name>
+        <servlet-class>servlets.AvailableTickets</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetBookings</servlet-name>
+        <servlet-class>servlets.GetBookings</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelBooking</servlet-name>
+        <servlet-class>servlets.CancelBooking</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InitDB</servlet-name>
         <url-pattern>/InitDB</url-pattern>
@@ -87,6 +99,18 @@
     <servlet-mapping>
         <servlet-name>BookRegister</servlet-name>
         <url-pattern>/BookRegister</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AvailableTickets</servlet-name>
+        <url-pattern>/AvailableTickets</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetBookings</servlet-name>
+        <url-pattern>/GetBookings</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelBooking</servlet-name>
+        <url-pattern>/CancelBooking</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

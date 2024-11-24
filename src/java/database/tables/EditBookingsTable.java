@@ -124,7 +124,8 @@ public class EditBookingsTable {
                 + "(booking_id INTEGER not NULL AUTO_INCREMENT, "
                 + " user_id INTEGER not NULL, "
                 + " event_id INTEGER not NULL, "
-                + " ticket_num INTEGER not NULL, "
+                + " vip_num INTEGER not NULL, "
+                + " reg_num INTEGER not NULL, "
                 + " date DATE not NULL, "
                 + " price INTEGER not NULL, "
                 + "FOREIGN KEY (user_id) REFERENCES users(user_id), "
@@ -145,11 +146,12 @@ public class EditBookingsTable {
         try {
             
             String insertQuery = "INSERT INTO "
-                    + " bookings (user_id,event_id,ticket_num,date,price)"
+                    + " bookings (user_id,event_id,vip_num,reg_num,date,price)"
                     + " VALUES ("
                     + "'" + b.getUser_id() + "',"
                     + "'" + b.getEvent_id()+ "',"
-                    + "'" + b.getTicket_num() + "',"
+                    + "'" + b.getVip_num() + "',"
+                    + "'" + b.getReg_num() + "',"
                     + "'" + b.getDate() + "',"
                     + "'" + b.getPrice() + "'"
                     + ")";
@@ -157,7 +159,6 @@ public class EditBookingsTable {
 
             stmt.executeUpdate(insertQuery);
             System.out.println("# The booking was successfully added in the database.");
-
             stmt.close();
 
         } catch (SQLException e) {
@@ -227,5 +228,25 @@ public class EditBookingsTable {
         return null;
         
     }
+     
+     public void databaseDeleteBooking(int booking_id) throws SQLException, ClassNotFoundException{
+         
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        
+        try {
+            
+            String query = "DELETE FROM bookings WHERE booking_id = " + booking_id;
+
+            stmt.executeUpdate(query);
+            System.out.println("# The booking was successfully deleted from the database.");
+            stmt.close();
+
+        } catch (SQLException e) {
+            System.err.println("deleteBooking says: Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+         
+     }
     
 }

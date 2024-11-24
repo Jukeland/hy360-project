@@ -29,7 +29,7 @@ public class AvailableEvents extends HttpServlet {
             JSONArray list = new JSONArray();
             
             for(Event e: avail_events){
-                list.put("\"name\":\"" + e.getName() + "\", \"date\":\"" + e.getDate() + "\", \"time\":\"" + e.getTime() + "\", \"type\":\"" + e.getType() + "\", \"capacity\":\"" + e.getCapacity() + "\"");
+                list.put("\"event_id\":\"" + e.getEvent_id() + "\", \"name\":\"" + e.getName() + "\", \"date\":\"" + e.getDate() + "\", \"time\":\"" + e.getTime() + "\", \"type\":\"" + e.getType() + "\", \"capacity\":\"" + e.getCapacity() + "\"");
             }
             
             System.out.println("\n=== AvailableEvents Servlet says: list = " + list + " ===\n");

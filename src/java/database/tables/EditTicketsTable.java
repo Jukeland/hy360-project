@@ -161,7 +161,7 @@ public class EditTicketsTable {
 
         try {
             
-            rs = stmt.executeQuery("SELECT * FROM tickets WHERE event_id = " + event_id);
+            rs = stmt.executeQuery("SELECT * FROM tickets WHERE event_id = " + event_id + " AND available = 1");
             
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
@@ -181,6 +181,64 @@ public class EditTicketsTable {
         }
 
         return null;
+        
+    }
+    
+    public ArrayList<Ticket> databaseGetTicketsByType(int event_id, String type, int available) throws SQLException, ClassNotFoundException{
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        ResultSet rs;
+
+        try {
+            
+            rs = stmt.executeQuery("SELECT * FROM tickets WHERE (event_id = " + event_id + " AND type = '" + type + "' AND available = " + available + " )");
+            
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Ticket ticket = gson.fromJson(json, Ticket.class);
+                tickets.add(ticket);
+            }
+            
+            stmt.close();
+            con.close();
+
+            return tickets;
+
+        } catch (JsonSyntaxException | SQLException e) {
+            System.err.println("EditTicketsTable: databaseGetTicketsByType says: Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+
+        return null;
+        
+    }
+    
+    public void updateTicket(int ticket_id, int available) throws SQLException, ClassNotFoundException{
+        
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        
+        try{
+            
+            String update = "UPDATE tickets SET "
+                + "available = '" + available + "'"
+                + "WHERE " 
+                + "ticket_id ='" + ticket_id + "'";
+            System.out.println("updateTicket says: query = " + update);
+            stmt.executeUpdate(update);
+            
+        }catch(SQLException ex){
+            
+            System.err.println("EditTicketsTable: updateTicket says: Got an exception! ");
+            System.err.println(ex.getMessage());
+            
+        }
+        
+        stmt.close();
+        con.close();
         
     }
     

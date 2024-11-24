@@ -1,29 +1,43 @@
 <div id="book_wrapper">
   
-<form id="book_form">
+<h3>Available Tickets</h3>
+<table id="tickets_table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody id="tickets_table_body">
 
-    <label for="fromdate">*From Date:</label>
-    <input type="date" id="fromdate" name="fromdate"
-        value="2024-01-01"
-        min="2024-01-01" max="2030-12-31"
-        required>
+    </tbody>
+</table>
+    
+<form id="book_form" onsubmit="book_check();return false">
+
+    <label for='vip_tickets'>Number of VIP tickets:</label>
+    <input id='vip_tickets'
+           pattern='[0-9]{1,}' minlength='1'
+           required>
     
     <br>
     <br>
     
-    <label for="todate">*To Date:</label>
-    <input type="date" id="todate" name="todate"
-        value="2024-01-01"
-        min="2024-01-01" max="2030-12-31"
-        required onchange="show_final_price()">
+    <label for='reg_tickets'>Number of Regular tickets:</label>
+    <input id='reg_tickets'
+           pattern='[0-9]{1,}' minlength='1'
+           required onblur="show_final_price()">
     
+    <br>
+    <label class="warnings" id="ticket_warning"></label>
     <br>
 
     <p id="final_price"></p>
 
     <br>
     
-    <input type="button" value="Book Event" onclick="bookPOST()">
+    <input type="submit" value="Book Tickets">
     
 </form>    
     
