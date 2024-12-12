@@ -236,5 +236,36 @@ public class EditEventsTable {
         
     }
    
+    public ArrayList<Event> databaseEventsInDateRange(String from_date, String to_date) throws SQLException, ClassNotFoundException{   
+
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Event> events = new ArrayList<>();
+        ResultSet rs;
+        
+        try{
+           
+            rs = stmt.executeQuery("SELECT * FROM events WHERE date >= '" + from_date + "' AND date <= '" + to_date + "'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Event event = gson.fromJson(json, Event.class);
+                events.add(event);
+            }
+            stmt.close();
+            con.close();
+            
+            return events;
+
+        }catch(SQLException e){
+            
+            System.err.println("EditEventsTable getId says: Got an exception! ");
+            System.err.println(e.getMessage());
+            
+        }
+        
+        return null;
+        
+    }
     
 }

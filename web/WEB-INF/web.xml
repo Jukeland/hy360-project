@@ -56,6 +56,14 @@
         <servlet-name>CancelBooking</servlet-name>
         <servlet-class>servlets.CancelBooking</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MostMoneyGained</servlet-name>
+        <servlet-class>servlets.MostMoneyGained</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookingsDateRange</servlet-name>
+        <servlet-class>servlets.BookingsDateRange</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InitDB</servlet-name>
         <url-pattern>/InitDB</url-pattern>
@@ -111,6 +119,14 @@
     <servlet-mapping>
         <servlet-name>CancelBooking</servlet-name>
         <url-pattern>/CancelBooking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MostMoneyGained</servlet-name>
+        <url-pattern>/MostMoneyGained</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingsDateRange</servlet-name>
+        <url-pattern>/BookingsDateRange</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

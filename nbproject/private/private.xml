@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/anton/OneDrive/Desktop/hy360-project/src/java/database/tables/EditBookingsTable.java</file>
             <file>file:/C:/Users/anton/OneDrive/Desktop/hy360-project/web/js/login_user.js</file>
-            <file>file:/C:/Users/anton/OneDrive/Desktop/hy360-project/src/java/servlets/CancelBooking.java</file>
+            <file>file:/C:/Users/anton/OneDrive/Desktop/hy360-project/src/java/database/tables/EditTicketsTable.java</file>
+            <file>file:/C:/Users/anton/OneDrive/Desktop/hy360-project/web/jsp/admin_page.jsp</file>
         </group>
     </open-files>
 </project-private>

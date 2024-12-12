@@ -249,4 +249,36 @@ public class EditBookingsTable {
          
      }
     
+     public ArrayList<Booking> databaseBookingsDateRange(String from_date, String to_date) throws SQLException, ClassNotFoundException{
+         
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Booking> bookings = new ArrayList<>();
+        ResultSet rs;
+        
+        try {
+            
+            rs = stmt.executeQuery("SELECT * FROM bookings WHERE date >= '" + from_date + "' AND date <= '" + to_date + "'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Booking book = gson.fromJson(json, Booking.class);
+                bookings.add(book);
+            }
+            stmt.close();
+            con.close();
+            
+            return bookings;
+
+        } catch (JsonSyntaxException | SQLException e) {
+            
+            System.err.println("EditBookingsTable: databaseBookingsDateRange says: Got an exception! ");
+            System.err.println(e.getMessage());
+            
+        }
+         
+         return null;
+         
+     }
+     
 }

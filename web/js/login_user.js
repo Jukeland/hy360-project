@@ -461,6 +461,7 @@ function admin_add_event(){
     
 }
 
+/* post request for adding an event */
 function add_event_POST(){
     
     let myForm = document.getElementById("event_form");
@@ -481,6 +482,98 @@ function add_event_POST(){
             alert(xhr.status);
         }
     };
+    
+}
+
+/* post request for getting the event with the most money gained in a period of dates */
+function most_money_gained_POST(){
+    
+    let myForm = document.getElementById("most_money_gained_form");
+    let formData = new FormData(myForm);
+    const data = {};
+    formData.forEach((value, key) => data[key] = value);
+    
+    let jsonData = JSON.stringify(data);
+    console.log("most_money_gained data: " + jsonData);
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'MostMoneyGained');
+    xhr.send(jsonData);
+    
+    xhr.onload = function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            show_most_money_gained(xhr.responseText);
+        }else if(xhr.status !== 200){
+            alert(xhr.status);
+        }
+    };
+    
+}
+
+/* function to update the page with the event info */
+function show_most_money_gained(response){
+    
+    const jr = JSON.parse(response);
+    
+     let text = '[{';
+    for(var i = 0; i < jr.length; i++){
+        text = text + jr[i];
+        if(i < jr.length - 1)
+            text = text + '},{';
+    }
+    text = text + '}]';
+    const obj = JSON.parse(text);
+    
+     for(var i = 0; i < jr.length; i++){
+        
+        $('#most_money_gained_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td>' + obj[i].type + '</td><td>' + obj[i].capacity + '</td><td>' + obj[i].money_gained + '€</td></tr>');
+        
+    }
+    
+}
+
+function bookings_date_range_POST(){
+    
+    let myForm = document.getElementById("bookings_date_range_form");
+    let formData = new FormData(myForm);
+    const data = {};
+    formData.forEach((value, key) => data[key] = value);
+    
+    let jsonData = JSON.stringify(data);
+    console.log("bookings_date_range_form data: " + jsonData);
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BookingsDateRange');
+    xhr.send(jsonData);
+    
+    xhr.onload = function(){
+        if(xhr.readyState === 4 && xhr.status === 200){
+            show_bookings_date_range(xhr.responseText);
+        }else if(xhr.status !== 200){
+            alert(xhr.status);
+        }
+    };
+    
+}
+
+function show_bookings_date_range(response){
+    
+    const jr = JSON.parse(response);
+    
+     let text = '[{';
+    for(var i = 0; i < jr.length; i++){
+        text = text + jr[i];
+        if(i < jr.length - 1)
+            text = text + '},{';
+    }
+    text = text + '}]';
+    const obj = JSON.parse(text);
+    
+     for(var i = 0; i < jr.length; i++){
+        
+        $('#bookings_date_range_body').append('<tr><td>' + obj[i].name + '</td><td>' + obj[i].date + '</td><td>' + obj[i].time + '</td><td>' + obj[i].ticket_num + '</td><td>' + obj[i].price + '€</td>');
+        
+    }
     
 }
 
